@@ -38,18 +38,22 @@ jobs:
       
       # 3. Dependencies install gareko
       - name: Install dependencies
+        working-directory: socket_app
         run: flutter pub get
       
       # 4. Code format check
       - name: Check formatting
+        working-directory: socket_app
         run: dart format --set-exit-if-changed .
       
       # 5. Code analyze gareko
       - name: Analyze code
+        working-directory: socket_app
         run: flutter analyze
       
       # 6. Unit tests run gareko
       - name: Run tests
+        working-directory: socket_app
         run: flutter test --coverage
       
       # 7. Coverage report upload (optional)
