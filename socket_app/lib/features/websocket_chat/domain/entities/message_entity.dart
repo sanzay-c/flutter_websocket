@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:socket_app/core/enum/message_type_enum.dart';
 
-
 class MessageEntity extends Equatable {
   final String id;
   final String content;

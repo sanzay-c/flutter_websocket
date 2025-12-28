@@ -21,7 +21,11 @@ class NetworkInfoImpl implements NetworkInfo {
   @override
   Stream<bool> get onConnectivityChanged {
     return _connectivity.onConnectivityChanged.map(
-      (results) => results.isNotEmpty && !results.contains(ConnectivityResult.none),// ConnectivityResult.none --> no internet
+      (results) =>
+          results.isNotEmpty &&
+          !results.contains(
+            ConnectivityResult.none,
+          ), // ConnectivityResult.none --> no internet
     );
   }
 }

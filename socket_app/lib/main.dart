@@ -4,10 +4,10 @@ import 'package:socket_app/features/websocket_chat/presentation/pages/websocket_
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Initialize dependency injection
   await configureDependencies();
-  
+
   runApp(const MyApp());
 }
 
@@ -19,11 +19,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'WebSocket Clean Architecture',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        useMaterial3: true,
-      ),
-      home:  WebSocketPage(),
+      theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
+      home: WebSocketPage(),
     );
   }
 }

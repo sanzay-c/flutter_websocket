@@ -14,7 +14,7 @@ import 'package:injectable/injectable.dart';
 
 part 'web_socket_event.dart';
 
-@injectable 
+@injectable
 class WebSocketBloc extends Bloc<WebSocketEvent, WebSocketState> {
   final ConnectWebSocket _connectWebSocket;
   final SendMessage _sendMessage;

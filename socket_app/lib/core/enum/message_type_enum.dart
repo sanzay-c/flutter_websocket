@@ -1,5 +1,1 @@
-enum MessageType {
-  text,
-  system,
-  error,
-}
+enum MessageType { text, system, error }

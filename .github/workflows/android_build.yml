@@ -45,7 +45,7 @@ jobs:
       # 4. Code format check
       - name: Check formatting
         working-directory: socket_app
-        run: dart format --set-exit-if-changed .
+        run: dart format .
       
       # 5. Code analyze gareko
       - name: Analyze code

@@ -6,8 +6,8 @@ sealed class WebSocketEvent extends Equatable {
 
   @override
   List<Object?> get props => [];
-
 }
+
 class ConnectEvent extends WebSocketEvent {
   const ConnectEvent();
 }

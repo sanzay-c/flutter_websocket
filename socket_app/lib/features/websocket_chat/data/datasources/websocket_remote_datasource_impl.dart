@@ -12,10 +12,10 @@ import '../models/message_model.dart';
 @LazySingleton(as: WebSocketRemoteDataSource)
 class WebSocketRemoteDataSourceImpl implements WebSocketRemoteDataSource {
   WebSocketChannel? _channel;
-  
+
   final StreamController<MessageModel> _messageController =
       StreamController<MessageModel>.broadcast();
-      
+
   final StreamController<ConnectionStatus> _connectionStatusController =
       StreamController<ConnectionStatus>.broadcast();
 
@@ -122,14 +122,16 @@ class WebSocketRemoteDataSourceImpl implements WebSocketRemoteDataSource {
     if (_reconnectAttempts >= ApiConstants.maxReconnectAttempts) {
       _updateConnectionStatus(ConnectionStatus.error);
       _addErrorMessage(
-          'Max reconnection attempts (${ApiConstants.maxReconnectAttempts}) reached');
+        'Max reconnection attempts (${ApiConstants.maxReconnectAttempts}) reached',
+      );
       return;
     }
 
     _reconnectAttempts++;
     _updateConnectionStatus(ConnectionStatus.reconnecting);
     _addSystemMessage(
-        'Attempting to reconnect... (${_reconnectAttempts}/${ApiConstants.maxReconnectAttempts})');
+      'Attempting to reconnect... (${_reconnectAttempts}/${ApiConstants.maxReconnectAttempts})',
+    );
 
     _reconnectTimer?.cancel();
     _reconnectTimer = Timer(ApiConstants.reconnectDelay, () {

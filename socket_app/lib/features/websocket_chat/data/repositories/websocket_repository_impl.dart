@@ -14,10 +14,7 @@ class WebSocketRepositoryImpl implements WebSocketRepository {
   final WebSocketRemoteDataSource _remoteDataSource;
   final NetworkInfo _networkInfo;
 
-  WebSocketRepositoryImpl(
-    this._remoteDataSource,
-    this._networkInfo,
-  );
+  WebSocketRepositoryImpl(this._remoteDataSource, this._networkInfo);
 
   @override
   ResultFuture<Stream<MessageEntity>> connect() async {

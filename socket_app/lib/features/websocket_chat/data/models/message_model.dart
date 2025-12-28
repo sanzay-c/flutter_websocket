@@ -43,7 +43,9 @@ class MessageModel {
   // Create Model from JSON
   factory MessageModel.fromJson(DataMap json) {
     return MessageModel(
-      id: json['id'] as String? ?? DateTime.now().millisecondsSinceEpoch.toString(),
+      id:
+          json['id'] as String? ??
+          DateTime.now().millisecondsSinceEpoch.toString(),
       content: json['content'] as String? ?? json['message'] as String? ?? '',
       timestamp: json['timestamp'] != null
           ? DateTime.parse(json['timestamp'] as String)

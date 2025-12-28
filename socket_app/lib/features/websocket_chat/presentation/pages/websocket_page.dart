@@ -1,4 +1,4 @@
-  import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:socket_app/core/enum/connection_status_enum.dart';
 import 'package:socket_app/core/enum/message_type_enum.dart';
@@ -7,7 +7,6 @@ import 'package:socket_app/features/websocket_chat/presentation/bloc/web_socket_
 
 import '../../../../core/di/injection.dart';
 import '../../domain/entities/message_entity.dart';
-
 
 class WebSocketPage extends StatelessWidget {
   const WebSocketPage({super.key});
@@ -42,9 +41,9 @@ class _WebSocketPageContentState extends State<WebSocketPageContent> {
   void _sendMessage() {
     if (_messageController.text.trim().isEmpty) return;
 
-    context
-        .read<WebSocketBloc>()
-        .add(SendMessageEvent(_messageController.text.trim()));
+    context.read<WebSocketBloc>().add(
+      SendMessageEvent(_messageController.text.trim()),
+    );
 
     _messageController.clear();
 
@@ -114,10 +113,7 @@ class _WebSocketPageContentState extends State<WebSocketPageContent> {
                       ),
                     ),
                     const SizedBox(width: 6),
-                    Text(
-                      subtitle,
-                      style: const TextStyle(fontSize: 12),
-                    ),
+                    Text(subtitle, style: const TextStyle(fontSize: 12)),
                   ],
                 ),
               ],
@@ -131,13 +127,13 @@ class _WebSocketPageContentState extends State<WebSocketPageContent> {
                 return PopupMenuButton<String>(
                   onSelected: (value) {
                     if (value == 'clear') {
-                      context
-                          .read<WebSocketBloc>()
-                          .add(const ClearMessagesEvent());
+                      context.read<WebSocketBloc>().add(
+                        const ClearMessagesEvent(),
+                      );
                     } else if (value == 'disconnect') {
-                      context
-                          .read<WebSocketBloc>()
-                          .add(const DisconnectEvent());
+                      context.read<WebSocketBloc>().add(
+                        const DisconnectEvent(),
+                      );
                     }
                   },
                   itemBuilder: (_) => const [
@@ -243,10 +239,7 @@ class _WebSocketPageContentState extends State<WebSocketPageContent> {
 class MessageBubble extends StatelessWidget {
   final MessageEntity message;
 
-  const MessageBubble({
-    super.key,
-    required this.message,
-  });
+  const MessageBubble({super.key, required this.message});
 
   @override
   Widget build(BuildContext context) {
@@ -279,8 +272,9 @@ class MessageBubble extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
-        mainAxisAlignment:
-            isSentByMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+        mainAxisAlignment: isSentByMe
+            ? MainAxisAlignment.end
+            : MainAxisAlignment.start,
         children: [
           Container(
             constraints: BoxConstraints(
