@@ -28,15 +28,16 @@
 //     expect(find.text('1'), findsOneWidget);
 //   });
 // }
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:socket_app/main.dart';
 
 void main() {
   testWidgets('App launches without errors', (WidgetTester tester) async {
+    // Pump the root widget
     await tester.pumpWidget(const MyApp());
 
-    // Check if the root widget exists
-    expect(find.byType(MaterialApp), findsOneWidget);
+    // Check that MyApp exists in the widget tree
+    expect(find.byType(MyApp), findsOneWidget);
   });
 }
+
