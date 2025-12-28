@@ -1,0 +1,60 @@
+name: CI - Test & Analyze
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - 'feature/*'      # Any branch that starts with "feature/"
+      - 'bugfix/*'       # Any branch that starts with "bugfix/"
+  pull_request:
+    branches:
+      - main
+      - develop
+      - 'feature/*'
+      - 'bugfix/*'
+
+jobs:
+  test:
+    name: Test & Code Quality
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest] 
+    
+    steps:
+      # 1. Code checkout gareko
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      # 2. Flutter setup gareko
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+          channel: 'stable'
+          cache: true
+      
+      # 3. Dependencies install gareko
+      - name: Install dependencies
+        run: flutter pub get
+      
+      # 4. Code format check
+      - name: Check formatting
+        run: dart format --set-exit-if-changed .
+      
+      # 5. Code analyze gareko
+      - name: Analyze code
+        run: flutter analyze
+      
+      # 6. Unit tests run gareko
+      - name: Run tests
+        run: flutter test --coverage
+      
+      # 7. Coverage report upload (optional)
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage/lcov.info
+          fail_ci_if_error: false
