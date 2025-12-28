@@ -89,7 +89,6 @@ class _WebSocketPageContentState extends State<WebSocketPageContent> {
                   statusColor = Colors.orange;
                   break;
                 case ConnectionStatus.disconnected:
-                  // TODO: Handle this case.
                   throw UnimplementedError();
               }
             } else if (state is WebSocketError) {

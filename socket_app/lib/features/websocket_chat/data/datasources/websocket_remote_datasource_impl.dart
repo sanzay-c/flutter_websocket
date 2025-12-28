@@ -96,6 +96,7 @@ class WebSocketRemoteDataSourceImpl implements WebSocketRemoteDataSource {
     }
   }
 
+  // ignore: strict_top_level_inference
   void _onError(error) {
     log('WebSocket error: $error');
     _isConnected = false;
@@ -131,7 +132,7 @@ class WebSocketRemoteDataSourceImpl implements WebSocketRemoteDataSource {
     _reconnectAttempts++;
     _updateConnectionStatus(ConnectionStatus.reconnecting);
     _addSystemMessage(
-      'Attempting to reconnect... (${_reconnectAttempts}/${ApiConstants.maxReconnectAttempts})',
+      'Attempting to reconnect... ($_reconnectAttempts/${ApiConstants.maxReconnectAttempts})',
     );
 
     _reconnectTimer?.cancel();
