@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:injectable/injectable.dart';
 import 'package:socket_app/core/enum/connection_status_enum.dart';
 import 'package:socket_app/features/websocket_chat/data/datasources/websocket_remote_datasoure.dart';
@@ -90,13 +91,13 @@ class WebSocketRemoteDataSourceImpl implements WebSocketRemoteDataSource {
         _messageController.add(messageModel);
       }
     } catch (e) {
-      print('Error parsing message: $e');
+      log('Error parsing message: $e');
       _addErrorMessage('Failed to parse message: $e');
     }
   }
 
   void _onError(error) {
-    print('WebSocket error: $error');
+    log('WebSocket error: $error');
     _isConnected = false;
     _updateConnectionStatus(ConnectionStatus.error);
     _addErrorMessage('Connection error: $error');
@@ -107,7 +108,7 @@ class WebSocketRemoteDataSourceImpl implements WebSocketRemoteDataSource {
   }
 
   void _onDone() {
-    print('WebSocket connection closed');
+    log('WebSocket connection closed');
     _isConnected = false;
     _pingTimer?.cancel();
 
@@ -149,7 +150,7 @@ class WebSocketRemoteDataSourceImpl implements WebSocketRemoteDataSource {
           // Echo server ko lagi simple ping message
           _channel!.sink.add('ping');
         } catch (e) {
-          print('Error sending ping: $e');
+          log('Error sending ping: $e');
         }
       }
     });
@@ -182,7 +183,7 @@ class WebSocketRemoteDataSourceImpl implements WebSocketRemoteDataSource {
     try {
       await _channel?.sink.close(status.goingAway);
     } catch (e) {
-      print('Error closing WebSocket: $e');
+      log('Error closing WebSocket: $e');
     }
 
     _channel = null;

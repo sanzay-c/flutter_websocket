@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
@@ -78,7 +79,7 @@ class WebSocketBloc extends Bloc<WebSocketEvent, WebSocketState> {
     result.fold(
       (failure) {
         // Show error but don't change state
-        print('Failed to send message: ${failure.message}');
+        log('Failed to send message: ${failure.message}');
       },
       (_) {
         // Message successfully sent

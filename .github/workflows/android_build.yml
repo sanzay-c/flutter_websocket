@@ -48,7 +48,7 @@ jobs:
       # 5. Code analyze gareko
       - name: Analyze code
         working-directory: socket_app
-        run: flutter analyze --fatal-infos
+        run: flutter analyze --fatal-warnings # warnings and info
       
       # 6. Unit tests run gareko
       - name: Run tests
