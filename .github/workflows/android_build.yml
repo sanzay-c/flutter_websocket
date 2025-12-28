@@ -33,7 +33,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version: 3.38.0
+          flutter-version: stable
           cache: true
 
       
@@ -61,5 +61,5 @@ jobs:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
-          files: ./coverage/lcov.info
+          files: socket_app/coverage/lcov.info
           fail_ci_if_error: false
