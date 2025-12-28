@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:socket_app/core/enum/connection_status_enum.dart';
 import 'package:socket_app/features/websocket_chat/domain/entities/message_entity.dart';
 import 'package:socket_app/features/websocket_chat/domain/repositories/websocket_repository.dart';
