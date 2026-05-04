@@ -1,63 +1,104 @@
-name: CI - Test & Analyze
+  name: CI/CD - Test & Build Android
 
-on:
-  push:
-    branches:
-      - main
-      - develop
-      - 'feature/*'      # Any branch that starts with "feature/"
-      - 'bugfix/*'       # Any branch that starts with "bugfix/"
-  pull_request:
-    branches:
-      - main
-      - develop
-      - 'feature/*'
-      - 'bugfix/*'
+# on: Yo "Trigger" ho. Meaning, yo robot kahile kaam garna thalchha?
+# push: & pull_request:: Jaba tapai le code push garnuhunchha or pull request create garnuhunchha.
+# branches: Main, develop, feature branches, or bugfix branches ma kehi change huda yo activate hunchha.
+  on:
+    push:
+      branches:
+        - main
+        - develop
+        - 'feature/*'
+        - 'bugfix/*'
+    pull_request:
+      branches:
+        - main
+        - develop
+        - 'feature/*'
+        - 'bugfix/*'
 
-jobs:
-  test:
-    name: Test & Code Quality
-    runs-on: ${{ matrix.os }}
+# Yo job ko kaam code ma galti chha ki chhaina bhanera check garnu ho.
+# runs-on: ubuntu-latest: GitHub le euta virtual computer (Linux) provide garchha yo run garna.
+# steps: Robot le garne kaam haru step-by-step:
+  jobs:
+    test:
+      name: Test & Code Quality
+      runs-on: ubuntu-latest
+      
+      steps:
+        # Step 1: Download your code (like getting your notebook ready)
+        - name: Checkout code
+          uses: actions/checkout@v4
+        
+        # Step 2: Install Flutter (like giving the robot the right tools)
+        - name: Setup Flutter
+          uses: subosito/flutter-action@v2
+          with:
+            channel: stable
+            cache: true
+        
+        # Step 3: Get all the packages the app needs
+        - name: Install dependencies
+          working-directory: socket_app
+          run: flutter pub get
+        
+        # Step 4: Check if the code looks neat and tidy. 
+        # The '--set-exit-if-changed' means if it's messy, the robot will fail this step and tell you to fix it!
+        - name: Check formatting
+          working-directory: socket_app
+          run: dart format --output=none --set-exit-if-changed .
+        
+        # Step 5: Read through the code to spot any bugs or mistakes
+        - name: Analyze code
+          working-directory: socket_app
+          run: flutter analyze --fatal-warnings
+        
+        # Step 6: Run automated tests to prove the app works
+        - name: Run tests
+          working-directory: socket_app
+          run: flutter test --coverage
+        
+        # Step 7: Upload test results (optional)
+        - name: Upload coverage to Codecov
+          uses: codecov/codecov-action@v3
+          with:
+            files: socket_app/coverage/lcov.info
+            fail_ci_if_error: false
 
-    strategy:
-      matrix:
-        os: [ubuntu-latest] 
-    
-    steps:
-      # 1. Code checkout gareko
-      - name: Checkout code
-        uses: actions/checkout@v4
-      
-      # 2. Flutter setup gareko
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          cache: true
-      
-      # 3. Dependencies install gareko
-      - name: Install dependencies
-        working-directory: socket_app
-        run: flutter pub get
-      
-      # 4. Code format check
-      - name: Check formatting
-        working-directory: socket_app
-        run: dart format .
-      
-      # 5. Code analyze gareko
-      - name: Analyze code
-        working-directory: socket_app
-        run: flutter analyze --fatal-warnings # warnings and info
-      
-      # 6. Unit tests run gareko
-      - name: Run tests
-        working-directory: socket_app
-        run: flutter test --coverage
-      
-      # 7. Coverage report upload (optional)
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          files: socket_app/coverage/lcov.info
-          fail_ci_if_error: false
+    # This is a NEW job that only runs if the 'test' job above finishes perfectly without errors
+    build_android:
+      name: Build Android APK
+      needs: test
+      runs-on: ubuntu-latest
+      steps:
+        # We need to download the code and tools again for this new job
+        - name: Checkout code
+          uses: actions/checkout@v4
+        
+        - name: Setup Java (needed to build Android apps)
+          uses: actions/setup-java@v4
+          with:
+            distribution: 'zulu'
+            java-version: '17'
+        
+        - name: Setup Flutter
+          uses: subosito/flutter-action@v2
+          with:
+            channel: stable
+            cache: true
+        
+        - name: Install dependencies
+          working-directory: socket_app
+          run: flutter pub get
+          
+        # Step 8: Build the actual app! This packages everything into an APK file
+        - name: Build APK
+          working-directory: socket_app
+          run: flutter build apk --release
+          
+        # Step 9: Save the built APK file so you can download it from GitHub
+        - name: Upload APK
+          uses: actions/upload-artifact@v4
+          with:
+            name: release-apk
+            path: socket_app/build/app/outputs/flutter-apk/app-release.apk
