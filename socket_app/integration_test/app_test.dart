@@ -7,10 +7,12 @@ void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   group('end-to-end test', () {
-    testWidgets('verify app starts and displays WebSocket Demo screen', (tester) async {
+    testWidgets('verify app starts and displays WebSocket Demo screen', (
+      tester,
+    ) async {
       // Act
       app.main();
-      
+
       // Wait for the app to settle down
       await tester.pumpAndSettle(const Duration(seconds: 2));
 

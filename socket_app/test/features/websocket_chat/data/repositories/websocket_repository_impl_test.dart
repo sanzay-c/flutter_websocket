@@ -10,6 +10,7 @@ import 'package:socket_app/features/websocket_chat/data/repositories/websocket_r
 import 'package:socket_app/features/websocket_chat/domain/entities/message_entity.dart';
 
 class MockRemoteDataSource extends Mock implements WebSocketRemoteDataSource {}
+
 class MockNetworkInfo extends Mock implements NetworkInfo {}
 
 void main() {
@@ -36,70 +37,90 @@ void main() {
     test('should check if the device is online', () async {
       // Arrange
       when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-      when(() => mockRemoteDataSource.connect()).thenAnswer((_) async => tMessageModelStream);
-      
+      when(
+        () => mockRemoteDataSource.connect(),
+      ).thenAnswer((_) async => tMessageModelStream);
+
       // Act
       await repository.connect();
-      
+
       // Assert
       verify(() => mockNetworkInfo.isConnected);
     });
 
-    test('should return Right(Stream<MessageEntity>) when connection is successful', () async {
-      // Arrange
-      when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-      when(() => mockRemoteDataSource.connect()).thenAnswer((_) async => tMessageModelStream);
+    test(
+      'should return Right(Stream<MessageEntity>) when connection is successful',
+      () async {
+        // Arrange
+        when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+        when(
+          () => mockRemoteDataSource.connect(),
+        ).thenAnswer((_) async => tMessageModelStream);
 
-      // Act
-      final result = await repository.connect();
+        // Act
+        final result = await repository.connect();
 
-      // Assert
-      expect(result.isRight(), true);
-      final stream = result.getOrElse(() => throw Exception());
-      expect(await stream.first, isA<MessageEntity>());
-      verify(() => mockRemoteDataSource.connect());
-    });
+        // Assert
+        expect(result.isRight(), true);
+        final stream = result.getOrElse(() => throw Exception());
+        expect(await stream.first, isA<MessageEntity>());
+        verify(() => mockRemoteDataSource.connect());
+      },
+    );
 
-    test('should return Left(ConnectionFailure) when device is offline', () async {
-      // Arrange
-      when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => false);
+    test(
+      'should return Left(ConnectionFailure) when device is offline',
+      () async {
+        // Arrange
+        when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => false);
 
-      // Act
-      final result = await repository.connect();
+        // Act
+        final result = await repository.connect();
 
-      // Assert
-      expect(result, const Left(ConnectionFailure('No internet connection')));
-      verifyZeroInteractions(mockRemoteDataSource);
-    });
+        // Assert
+        expect(result, const Left(ConnectionFailure('No internet connection')));
+        verifyZeroInteractions(mockRemoteDataSource);
+      },
+    );
 
-    test('should return Left(WebSocketFailure) when datasource throws WebSocketException', () async {
-      // Arrange
-      when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-      when(() => mockRemoteDataSource.connect()).thenThrow(const WebSocketException('WS Error'));
+    test(
+      'should return Left(WebSocketFailure) when datasource throws WebSocketException',
+      () async {
+        // Arrange
+        when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+        when(
+          () => mockRemoteDataSource.connect(),
+        ).thenThrow(const WebSocketException('WS Error'));
 
-      // Act
-      final result = await repository.connect();
+        // Act
+        final result = await repository.connect();
 
-      // Assert
-      expect(result, const Left(WebSocketFailure('WS Error')));
-    });
+        // Assert
+        expect(result, const Left(WebSocketFailure('WS Error')));
+      },
+    );
   });
 
   group('sendMessage', () {
     const tMessage = 'Hello';
 
-    test('should return Right(null) when message is sent successfully', () async {
-      // Arrange
-      when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-      when(() => mockRemoteDataSource.sendMessage(any())).thenAnswer((_) async => Future.value());
+    test(
+      'should return Right(null) when message is sent successfully',
+      () async {
+        // Arrange
+        when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+        when(
+          () => mockRemoteDataSource.sendMessage(any()),
+        ).thenAnswer((_) async => Future.value());
 
-      // Act
-      final result = await repository.sendMessage(tMessage);
+        // Act
+        final result = await repository.sendMessage(tMessage);
 
-      // Assert
-      expect(result, const Right(null));
-      verify(() => mockRemoteDataSource.sendMessage(tMessage));
-    });
+        // Assert
+        expect(result, const Right(null));
+        verify(() => mockRemoteDataSource.sendMessage(tMessage));
+      },
+    );
 
     test('should return Left(ConnectionFailure) when offline', () async {
       // Arrange
@@ -116,7 +137,9 @@ void main() {
   group('disconnect', () {
     test('should call disconnect on datasource', () async {
       // Arrange
-      when(() => mockRemoteDataSource.disconnect()).thenAnswer((_) async => Future.value());
+      when(
+        () => mockRemoteDataSource.disconnect(),
+      ).thenAnswer((_) async => Future.value());
 
       // Act
       final result = await repository.disconnect();
